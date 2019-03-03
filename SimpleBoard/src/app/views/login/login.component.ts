@@ -13,6 +13,7 @@ import { DirectiveRegistryValuesIndex } from '@angular/core/src/render3/interfac
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  errorMessage: string;
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
     this.loginForm = new FormGroup({
       "username": new FormControl("", [
         Validators.required,
-        Validators.minLength(4)
+        Validators.minLength(4),
+        Validators.maxLength(32)
       ]),
       "password": new FormControl("", [
         Validators.required,
@@ -37,12 +39,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errorMessage = null;
     let user  = this.loginForm.value as User;
     this.userService.login(user).subscribe(success => {
-      this.router.navigateByUrl("/board");
-    },
-    error => {
-      alert("Wrong password or shit!?");
+      if (success == null)
+        this.errorMessage = "Login failed. Wrong user / password?";
+      else
+        this.router.navigateByUrl("/board");
     });
   }
 

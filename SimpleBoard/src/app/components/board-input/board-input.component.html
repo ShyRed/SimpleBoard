@@ -1,0 +1,7 @@
+<form [formGroup]="boardInputForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="boardEntryMessage">Your message</label>
+      <textarea id="boardEntryMessage" formControlName="message" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="message.invalid">Post</button> 
+</form>

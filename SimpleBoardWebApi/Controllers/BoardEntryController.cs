@@ -37,8 +37,8 @@ namespace SimpleBoardWebApi.Controllers
 
         // GET: api/BoardEntry
         [Authorize]
-        [HttpGet]
-        public async Task<IEnumerable<BoardEntry>> Get(int page = 0, int pageSize = 10)
+        [HttpGet("{page}/{pageSize}", Name = "GetByPage")]
+        public async Task<IEnumerable<BoardEntry>> Get(int page, int pageSize)
         {
             using (var session = _sessionFactory())
             {
@@ -48,7 +48,7 @@ namespace SimpleBoardWebApi.Controllers
 
         // GET: api/BoardEntry/5
         [Authorize]
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetById")]
         public async Task<ActionResult<BoardEntry>> Get(int id)
         {
             using (var session = _sessionFactory())

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of, pipe } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import User from '../models/user';
 
@@ -15,6 +16,7 @@ export class UserService {
   private loggedInUser: User;
   private loggedInUserSource = new Subject<User>();
   public loggedInUser$ = this.loggedInUserSource.asObservable();
+  public knownUsers: { [id: number] : User } = {};
 
   constructor(private http: HttpClient,
     private jwtHelper: JwtHelperService) { }
@@ -24,9 +26,17 @@ export class UserService {
     return token != null && !this.jwtHelper.isTokenExpired(token);
   }
 
+  getUser(id: number): Observable<User> {
+    if (this.knownUsers[id])
+      return of(this.knownUsers[id]);
+    return this.http.get<User>(`${url}Users/${id}`).pipe(tap(x => {
+      this.knownUsers[id] = x;
+    }));
+  }
+
   getLoggedInUser(): Observable<User> {
     if (this.loggedInUser == null) {
-      this.http.get<User>(`${url}login`).subscribe(x => {
+      this.http.get<User>(`${url}Login`).subscribe(x => {
         this.setLoggedInUser(x);
       });
     }
@@ -34,9 +44,12 @@ export class UserService {
   }
 
   login(user: User): Observable<User> {
-    this.http.post<User>(`${url}Login`, user).subscribe(x => { 
-      this.setLoggedInUser(x);
-      localStorage.setItem("token", x.token);
+    this.http.post<User>(`${url}Login`, user).subscribe(success => { 
+      this.setLoggedInUser(success);
+      localStorage.setItem("token", success.token);
+     },
+     error => {
+      this.logout();
      });
      return this.loggedInUser$;
   }

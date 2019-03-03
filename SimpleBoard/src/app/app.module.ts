@@ -11,6 +11,7 @@ import { LoginComponent } from './views/login/login.component';
 import { BoardComponent } from './views/board/board.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { BoardEntryComponent } from './components/board-entry/board-entry.component';
+import { BoardInputComponent } from './components/board-input/board-input.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -22,7 +23,8 @@ export function tokenGetter() {
     LoginComponent,
     BoardComponent,
     HeaderComponent,
-    BoardEntryComponent
+    BoardEntryComponent,
+    BoardInputComponent
   ],
   imports: [
     BrowserModule,

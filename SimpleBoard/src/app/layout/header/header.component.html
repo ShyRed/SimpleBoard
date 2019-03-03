@@ -8,7 +8,7 @@
     <ul class="navbar-nav mr-auto">
       <li *ngIf="user == null" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a class="nav-link" routerLink="/">Login</a></li>
       <li *ngIf="user != null" class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/board">Board</a></li>
-      <li *ngIf="user != null" class="nav-item"><a class="nav-link" href="#" (click)="onLogoutClick()">{{user.firstName}} {{user.lastName}} &lt;{{user.username}}&gt; (Logout)</a></li>
+      <li *ngIf="user != null" class="nav-item"><a class="nav-link" href="#" (click)="onLogoutClick()">Logout {{user.firstName}} {{user.lastName}} &lt;{{user.username}}&gt;</a></li>
     </ul>
   </div>
 </nav>

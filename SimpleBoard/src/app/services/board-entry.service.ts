@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import BoardEntry from '../models/board-entry';
 
-const url:string = "http://localhost:5000/api/";
+const url:string = "http://localhost:5000/api";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class BoardEntryService {
   }
 
   getBoardEntries(page: number, pageSize: number): Observable<BoardEntry[]> {
-    return this.http.get<BoardEntry[]>(`${url}/BoardEntry?page=${page}&pageSize=${pageSize}`);
+    return this.http.get<BoardEntry[]>(`${url}/BoardEntry/${page}/${pageSize}`);
   }
 
   addBoardEntry(entry: BoardEntry) : Observable<BoardEntry> {
