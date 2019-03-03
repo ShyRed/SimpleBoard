@@ -12,6 +12,7 @@ import { BoardComponent } from './views/board/board.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { BoardEntryComponent } from './components/board-entry/board-entry.component';
 import { BoardInputComponent } from './components/board-input/board-input.component';
+import { RegistrationComponent } from './views/registration/registration.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -24,7 +25,8 @@ export function tokenGetter() {
     BoardComponent,
     HeaderComponent,
     BoardEntryComponent,
-    BoardInputComponent
+    BoardInputComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

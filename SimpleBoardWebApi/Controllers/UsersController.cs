@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate;
 using SimpleBoardWebApi.Models;
@@ -23,6 +24,7 @@ namespace SimpleBoardWebApi.Controllers
         }
 
         // GET api/users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
@@ -33,6 +35,7 @@ namespace SimpleBoardWebApi.Controllers
         }
 
         // GET api/users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(int id)
         {
@@ -47,24 +50,35 @@ namespace SimpleBoardWebApi.Controllers
 
         // POST api/users
         [HttpPost]
-        public async Task Post([FromBody] User user)
+        public async Task<ActionResult> Post([FromBody] User user)
         {
             using (var session = _sessionFactory())
             using (var trans = session.Value.BeginTransaction())
             {
                 trans.Begin();
-                await _userService.Register(session.Value, user);
-                await trans.CommitAsync();
+                try
+                {
+                    await _userService.Register(session.Value, user);
+                    await trans.CommitAsync();
+                    return Ok();
+                }
+                catch
+                {
+                    await trans.RollbackAsync();
+                    return BadRequest();
+                }
             }
         }
 
         // PUT api/users/5
+        [Authorize]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

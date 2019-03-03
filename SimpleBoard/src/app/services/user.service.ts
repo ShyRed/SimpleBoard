@@ -60,7 +60,7 @@ export class UserService {
   }
 
   register(user: User): Observable<any> {
-    return this.http.post<User>(url, user);
+    return this.http.post<User>(`${url}Users`, user);
   }
 
   private setLoggedInUser(user: User)
